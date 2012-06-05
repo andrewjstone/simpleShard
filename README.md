@@ -13,16 +13,25 @@ SimpleShard is perfect for workloads where activity can be divided based on a si
 # Principles
  * Transactions are Good
  * ACID is important - see Transactions are Good
- * It is always simpler to avoid distributed transactions
+ * Horizontal Scaling is important
+ * Horizontal Scaling of ACID transactions is important
+ * [Calvin](http://cs-www.cs.yale.edu/homes/dna/papers/calvin-sigmod12.pdf), while awesome, is not production ready
+ * Calvin is not simple
+ * Calvin does avoid distributed transactions as much as possible
+ * Calvin still has distributed locks 
+ * It is always simpler to avoid distributed transactions and locks
  * Distributed transactions are slow
  * Routing based on a single key is easy 
  * Moving data is slow
  * Moving a lot of data is really slow
  * Autobalancing is very hard to do correctly
- * Autobalancing is ***NOT SIMPLE***
+ * Autobalancing is not simple 
  * Manual data movement is easy
  * Humans understand when data movement is necessary
  * Good monitoring helps humans do their jobs
+ * RAM is expensive
+ * Disks are cheap
+ * Time based data and range queries work very well in disk based SQL systems
 
 # Components
 
