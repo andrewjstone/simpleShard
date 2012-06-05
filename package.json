@@ -13,7 +13,9 @@
   "dependencies": {
     "async": "*",
     "mocha": "*",
-    "request": "*"
+    "request": "*",
+    "pg": "*",
+    "node-uuid": "*"
   },
   "devDependencies": {}
 }

@@ -10,6 +10,20 @@ SimpleShard is perfect for workloads where activity can be divided based on a si
  * Measure usage of each data set by shard key
  * Allow manual movement of data sets by shard key if data is **unbalanced**
 
+# Principles
+ * Transactions are Good
+ * ACID is important - see Transactions are Good
+ * It is always simpler to avoid distributed transactions
+ * Distributed transactions are slow
+ * Routing based on a single key is easy 
+ * Moving data is slow
+ * Moving a lot of data is really slow
+ * Autobalancing is very hard to do correctly
+ * Autobalancing is ***NOT SIMPLE***
+ * Manual data movement is easy
+ * Humans understand when data movement is necessary
+ * Good monitoring helps humans do their jobs
+
 # Components
 
  * ***Statistics Manager***
