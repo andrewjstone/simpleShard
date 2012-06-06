@@ -6,7 +6,8 @@ var assert = require('assert'),
 
 var router = null,
     client = null,
-    port1 = 5454;
+    port1 = 5454,
+    shardKey = null;
 
 describe('create a router', function() {
   it('constructs successfully', function(done) {
@@ -74,9 +75,30 @@ describe('Prepare Database', function() {
 
 describe('Add a shard key to the node', function() {
   it('should add the key to the shardkeys table', function(done) {
-    var shardKey = uuid.v1();
+    shardKey = uuid.v1();
     client.addShardKey('127.0.0.1:5432', shardKey, function(err) {
       assertNotErr(err);
+      done();
+    });
+  });
+});
+
+describe('lookup a node by shard key', function() {
+  it('returns the sole node', function(done) {
+    client.lookup(shardKey, function(err, node) {
+      assertNotErr(err);
+      assert.equal(node, '127.0.0.1:5432');
+      done();
+    });
+  });
+});
+
+describe('lookup a node with an invalid shard key', function() {
+  it('returns an error', function(done) {
+    var badKey = uuid.v1();
+    client.lookup(badKey, function(err, node) {
+      assert(err);
+      assert(!node);
       done();
     });
   });
