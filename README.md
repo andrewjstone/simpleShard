@@ -24,8 +24,7 @@ SimpleShard is perfect for workloads where activity can be divided based on a si
  * Good monitoring helps humans do their jobs
  * RAM is expensive
  * Disks are cheap
- * SSDs vastly improve random disk access, and hence joins
- * [Buy a fucking ssd](http://buyafuckingssd.com/)
+ * [SSDs](http://buyafuckingssd.com/) vastly improve random disk access, and hence joins
  * Time based data and range queries work very well in disk based SQL systems
 
 # Components
