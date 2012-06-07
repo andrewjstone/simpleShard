@@ -1,28 +1,31 @@
-var db = require('../lib/db.js'),
+var database = require('../lib/db.js'),
     assert = require('assert'),
     uuid = require('node-uuid');
 
-var client = null;
+var db = null;
 
 describe('API', function() {
+  it('new Db()', function() {
+    db = database.create('postgres'); 
+    assert(db);
+  });
+
   it('db.connect(callback)', function(done) {
-    db.connect(function(err, _client) {
+    db.connect(function(err) {
       assertNotErr(err);
-      client = _client;
-      assert(client);
       done();
     });
   });
 
-  it('db.deleteShardKeyTable(client, callback)', function(done) {
-    db.deleteShardKeyTable(client, function(err) {
+  it('db.deleteShardKeyTable(callback)', function(done) {
+    db.deleteShardKeyTable(function(err) {
       assertNotErr(err);
       done();
     });
   });
 
   it('db.createShardKeyTable(client, callback)', function(done) {
-    db.createShardKeyTable(client, function(err) {
+    db.createShardKeyTable(function(err) {
       assertNotErr(err);
       done();
     });
@@ -30,7 +33,7 @@ describe('API', function() {
 
   it('db.addShardKey(client, callback)', function(done) {
     var shardKey = uuid.v1();
-    db.addShardKey(client, shardKey, function(err) {
+    db.addShardKey(shardKey, function(err) {
       assertNotErr(err);
       done();
     });

@@ -1,13 +1,14 @@
 var assert = require('assert'),
     Router = require('../lib/router'),
     Client = require('../lib/client'),
-    db = require('../lib/db'),
+    database = require('../lib/db'),
     uuid = require('node-uuid');
 
 var router = null,
     client = null,
     port1 = 5454,
-    shardKey = null;
+    shardKey = null,
+    db = null;
 
 describe('create a router', function() {
   it('constructs successfully', function(done) {
@@ -32,7 +33,7 @@ describe('create a client of the router', function() {
 
 describe('Add node to a single router', function() {
   it('should add the nodes to the "nodes" list of the router', function(done) {
-    client.addNode('127.0.0.1:5432', function(err, nodes) {
+    client.addNode('127.0.0.1:5432', 'postgres', function(err, nodes) {
       assertNotErr(err);
       assert.equal(nodes.length, 1);
       done();
@@ -49,13 +50,14 @@ describe('Add node to a single router', function() {
 });
 
 describe('Prepare Database', function() {
-  var client = null;
+  it('create db', function() {
+    db = database.create('postgres');
+  });
 
   it('delete shard key table', function(done) {
-    db.connect(function(err, _client) {
+    db.connect(function(err) {
       assertNotErr(err);
-      client = _client;
-      db.deleteShardKeyTable(client, function(err, result) {
+      db.deleteShardKeyTable(function(err, result) {
         assertNotErr(err);
         done();
       });
@@ -63,9 +65,9 @@ describe('Prepare Database', function() {
   });
 
   it('create shard key table', function(done) {
-    db.connect(function(err, client) {
+    db.connect(function(err) {
       assertNotErr(err);
-      db.createShardKeyTable(client, function(err, result) {
+      db.createShardKeyTable(function(err, result) {
         assertNotErr(err);
         done();
       });
