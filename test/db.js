@@ -1,43 +1,61 @@
-var database = require('../lib/db.js'),
+var dbFactory = require('../lib/dbFactory.js'),
     assert = require('assert'),
     uuid = require('node-uuid');
 
-var db = null;
+// Different Backends
+var PostgresDb = require('../lib/postgresDb'),
+    MemoryDb = require('../lib/memoryDb');
+
+var postgresDb = null,
+    memoryDb = null;
 
 describe('API', function() {
-  it('new Db()', function() {
-    db = database.create('postgres'); 
-    assert(db);
+  it('register a postgres db', function() {
+    assert.doesNotThrow(
+      function() {
+        dbFactory.register('postgres', PostgresDb);
+      }
+    );
   });
 
-  it('db.connect(callback)', function(done) {
-    db.connect(function(err) {
+  it('register a memory db', function() {
+    assert.doesNotThrow(
+      function() {
+        dbFactory.register('memory', MemoryDb);
+      }
+    );
+  });
+
+  it('create a postgres db', function() {
+    assert.doesNotThrow(
+      function() {
+        postgresDb = dbFactory.create('postgres'); 
+      }
+    );
+  });
+
+  it('create a memory db', function() {
+    assert.doesNotThrow(
+      function() {
+        memoryDb = dbFactory.create('memory'); 
+      }
+    );
+  });
+
+  it('connect to a postgres db', function(done) {
+    postgresDb.connect(function(err) {
       assertNotErr(err);
       done();
     });
   });
 
-  it('db.deleteShardKeyTable(callback)', function(done) {
-    db.deleteShardKeyTable(function(err) {
+  it('connect to a memory db', function(done) {
+    memoryDb.connect(function(err) {
       assertNotErr(err);
       done();
     });
   });
 
-  it('db.createShardKeyTable(client, callback)', function(done) {
-    db.createShardKeyTable(function(err) {
-      assertNotErr(err);
-      done();
-    });
-  });
-
-  it('db.addShardKey(client, callback)', function(done) {
-    var shardKey = uuid.v1();
-    db.addShardKey(shardKey, function(err) {
-      assertNotErr(err);
-      done();
-    });
-  });
 });
 
 function assertNotErr(err) {

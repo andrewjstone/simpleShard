@@ -1,19 +1,44 @@
 var assert = require('assert'),
-    Router = require('../lib/router'),
-    database = require('../lib/db'),
     uuid = require('node-uuid'),
-    async = require('async');
+    async = require('async'),
+    routerFactory = require('../lib/routerFactory.js');
 
-var router = null,
-    client = null,
-    port1 = 5454,
-    shardKey = null,
-    db = null;
 
-describe('create a router', function() {
-  it('constructs successfully', function(done) {
-    router = new Router('127.0.0.1', port1);
-    setTimeout(done, 100);
+var RedisRouter = require('../lib/redisRouter'),
+    router = null,
+    ip = '127.0.0.1', 
+    port = 6379,
+    uuid1 = uuid.v1();
+
+describe('setup a redis router', function() {
+  it('register a redis router', function() {
+    assert.doesNotThrow(
+      function() {
+        routerFactory.register('redis', RedisRouter);
+      }
+    );
+  });
+
+  it('create a redis router', function() {
+    assert.doesNotThrow(
+      function() {
+        router = routerFactory.create('redis'); 
+      }
+    );
+  });
+
+  it('connect to a redis router', function(done) {
+    router.connect(ip, port, function(err) {
+      assertNotErr(err);
+      done();
+    });
+  });
+
+  it('empty', function(done) {
+    router.empty(function(err) {
+      assertNotErr(err);
+      done();
+    });
   });
 });
 
@@ -27,14 +52,18 @@ describe('add 10 memory nodes', function() {
     });
   }); 
 
-  it('10 nodes got added', function() {
-    assert.equal(Object.keys(router.getNodes()).length, 10);
+  it('10 nodes got added', function(done) {
+    router.getNodeNames(function(err, nodes) {
+      assertNotErr(err);
+      assert.equal(nodes.length, 10);
+      done();
+    });
   });
 });
 
 describe('add a shard key to each node', function() {
   it('succeeds', function(done) {
-    async.forEach(Object.keys(router.getNodes()), function(nodeName, cb) {
+    async.forEach(router.getNodeNames, function(nodeName, cb) {
       var shardKey = uuid.v1();
       router.addShardKey(nodeName, shardKey, cb);
     }, function(err) {

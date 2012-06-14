@@ -15,7 +15,8 @@
     "mocha": "*",
     "request": "*",
     "pg": "*",
-    "node-uuid": "*"
+    "node-uuid": "*",
+    "redis": "*"
   },
   "devDependencies": {}
 }
