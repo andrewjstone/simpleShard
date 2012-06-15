@@ -4,6 +4,18 @@ SimpleShard is a routing/sharding mechanism backed by any database, including tr
 
 SimpleShard is perfect for workloads where activity can be divided based on a single key. All workloads for that key are sent to the same shard. Replication and fault tolerance is ***NOT*** handled by SimpleShard. The underlying storage system's native mechanisms are used for this purpose. In PostgresSQL's case this is WAL streaming or synchronous replication.
 
+# Install
+
+    npm install simpleShard
+
+# Run
+
+    node index.js
+
+# Connect to the repl
+
+    nc localhost 5001
+
 # Responsibilities
 
  * Route all requests to the appropriate node based on shard key 
