@@ -2,7 +2,7 @@ var routerFactory = require('../lib/routerFactory.js'),
     assert = require('assert'),
     uuid = require('node-uuid');
 
-var RedisRouter = require('../lib/redisRouter'),
+var RedisRouter = require('../lib/routers/redisRouter'),
     redisRouter = null,
     ip = '127.0.0.1', 
     port = 6379,

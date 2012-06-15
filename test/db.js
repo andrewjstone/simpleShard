@@ -3,8 +3,8 @@ var dbFactory = require('../lib/dbFactory.js'),
     uuid = require('node-uuid');
 
 // Different Backends
-var PostgresDb = require('../lib/postgresDb'),
-    MemoryDb = require('../lib/memoryDb');
+var PostgresDb = require('../lib/databases/postgresDb'),
+    MemoryDb = require('../lib/databases/memoryDb');
 
 var postgresDb = null,
     memoryDb = null;

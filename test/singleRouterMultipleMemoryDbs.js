@@ -4,7 +4,7 @@ var assert = require('assert'),
     routerFactory = require('../lib/routerFactory.js');
 
 
-var RedisRouter = require('../lib/redisRouter'),
+var RedisRouter = require('../lib/routers/redisRouter'),
     router = null,
     ip = '127.0.0.1', 
     port = 6379,
