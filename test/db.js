@@ -70,10 +70,17 @@ describe('API', function() {
       postgresDb.getStatusTables(function(err, status) {
         assertNotErr(err);
         assert(status);
-        console.log(status);
-        console.log('\n'+table.create(status.rows));
         done();
       });
+    });
+  });
+
+  it('query the database', function(done) {
+    var query = 'SELECT * FROM pg_stat_user_tables';
+    postgresDb.query(query, function(err, data) {
+      assertNotErr(err);
+      assert(data);
+      done();
     });
   });
 
