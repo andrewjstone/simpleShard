@@ -16,7 +16,8 @@
     "request": "*",
     "pg": "*",
     "node-uuid": "*",
-    "redis": "*"
+    "redis": "*",
+    "cli-table": "*"
   },
   "devDependencies": {}
 }

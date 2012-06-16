@@ -1,6 +1,7 @@
-var dbFactory = require('../lib/dbFactory.js'),
+var dbFactory = require('../lib/dbFactory'),
     assert = require('assert'),
-    uuid = require('node-uuid');
+    uuid = require('node-uuid'),
+    table = require('../lib/table');
 
 // Different Backends
 var PostgresDb = require('../lib/databases/postgresDb'),
@@ -53,6 +54,26 @@ describe('API', function() {
     memoryDb.connect(function(err) {
       assertNotErr(err);
       done();
+    });
+  });
+
+  describe('get status', function() {
+    it('database', function(done) {
+      postgresDb.getStatusDatabase(function(err, status) {
+        assertNotErr(err);
+        assert(status);
+        done();
+      });
+    });
+
+    it('tables', function(done) {
+      postgresDb.getStatusTables(function(err, status) {
+        assertNotErr(err);
+        assert(status);
+        console.log(status);
+        console.log('\n'+table.create(status.rows));
+        done();
+      });
     });
   });
 

@@ -1,11 +1,11 @@
 var repl = require('./lib/repl'),
     routerFactory = require('./lib/routerFactory'),
-    databaseFactory = require('./lib/dbFactory'),
+    dbFactory= require('./lib/dbFactory'),
     fs = require('fs'),
     repl = require('./lib/repl');
 
 exports.routerFactory = routerFactory;
-exports.databaseFactory = databaseFactory;
+exports.dbFactory = dbFactory;
 exports.repl = repl;
 
 main(); 
@@ -26,7 +26,7 @@ function registerDatabases() {
   files.forEach(function(file) {
     if (file.match(/.swp$/)) return;
     var _module  = require(dir+'/'+file);
-    databaseFactory.register(_module.id, _module);
+    dbFactory.register(_module.id, _module);
   });
 }
 
