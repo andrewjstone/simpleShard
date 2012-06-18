@@ -1,12 +1,21 @@
-var routerFactory = require('../lib/routerFactory.js'),
+var routerFactory = require('../lib/routerFactory'),
+    dbFactory = require('../lib/dbFactory'),
     assert = require('assert'),
     uuid = require('node-uuid');
 
 var RedisRouter = require('../lib/routers/redisRouter'),
+    PostgresDb = require('../lib/databases/postgresDb'),
     redisRouter = null,
     ip = '127.0.0.1', 
     port = 6379,
-    uuid1 = uuid.v1();
+    uuid1 = uuid.v1(),
+    node1 = '127.0.0.1:5432';
+
+describe('setup', function() {
+  it('register a postgres db', function() {
+    dbFactory.register('postgres', PostgresDb);
+  });
+});
 
 describe('API', function() {
   it('register a redis router', function() {
@@ -25,14 +34,14 @@ describe('API', function() {
     );
   });
 
-  it('connect to a redis router', function(done) {
-    redisRouter.connect(ip, port, function(err) {
+  it('connect to a redis indexer', function(done) {
+    redisRouter.connectToIndexer(ip, port, function(err) {
       assertNotErr(err);
       done();
     });
   });
 
-  it('empty the router', function(done) {
+  it('empty the indexer', function(done) {
     redisRouter.empty(function(err) {
       assertNotErr(err);
       done();
@@ -40,7 +49,7 @@ describe('API', function() {
   });
 
   it('add Node', function(done) {
-    redisRouter.addNode('node1', 'memory', function(err) {
+    redisRouter.addNode(node1, 'memory', function(err) {
       assertNotErr(err);
       done();
     });
@@ -55,7 +64,7 @@ describe('API', function() {
   });
 
   it('get node', function(done) {
-    redisRouter.getNode('node1', function(err, node) {
+    redisRouter.getNode(node1, function(err, node) {
       assertNotErr(err);
       assert.equal(node.type, 'memory');
       done();
@@ -63,7 +72,7 @@ describe('API', function() {
   });
 
   it('add shard key', function(done) {
-    redisRouter.addShardKey('node1', uuid1, function(err) {
+    redisRouter.addShardKey(node1, uuid1, function(err) {
       assertNotErr(err);
       done();
     });
@@ -72,11 +81,17 @@ describe('API', function() {
   it('lookup node based on shard key', function(done) {
     redisRouter.lookup(uuid1, function(err, node) {
       assertNotErr(err);
-      assert.equal(node, 'node1');
+      assert.equal(node, node1);
       done();
     });
   });
 
+  it('connect to node', function(done) {
+    redisRouter.connectToDatabase(node1, 'postgres', function(err) {
+      assertNotErr(err);
+      done();
+    });
+  });
 
 });
 
