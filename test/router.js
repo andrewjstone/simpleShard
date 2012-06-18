@@ -93,6 +93,14 @@ describe('API', function() {
     });
   });
 
+  it('route a postgres sql query', function(done) {
+    redisRouter.route(uuid1, 'SELECT * FROM pg_stat_activity', function(err, response) {
+      assertNotErr(err);
+      assert(response);
+      done();
+    });
+  });
+
 });
 
 function assertNotErr(err) {
