@@ -1,10 +1,10 @@
 var repl = require('./lib/repl'),
-    routerFactory = require('./lib/routerFactory'),
+    indexerFactory = require('./lib/indexerFactory'),
     dbFactory= require('./lib/dbFactory'),
     fs = require('fs'),
     repl = require('./lib/repl');
 
-exports.routerFactory = routerFactory;
+exports.indexerFactory = indexerFactory;
 exports.dbFactory = dbFactory;
 exports.repl = repl;
 
@@ -12,7 +12,7 @@ main();
 
 function main() {
   registerDatabases();
-  registerRouters();
+  registerIndexers();
   startRepl();
 }
 
@@ -30,13 +30,13 @@ function registerDatabases() {
   });
 }
 
-function registerRouters() {
-  var dir = __dirname+'/lib/routers';
+function registerIndexers() {
+  var dir = __dirname+'/lib/indexers';
   var files = fs.readdirSync(dir);
   files.forEach(function(file) {
     if (file.match(/.swp$/)) return;
     var _module  = require(dir+'/'+file);
-    routerFactory.register(_module.id, _module);
+    indexerFactory.register(_module.id, _module);
   });
 }
 
