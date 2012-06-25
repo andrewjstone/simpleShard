@@ -1,34 +1,28 @@
 var assert = require('assert'),
     uuid = require('node-uuid'),
     async = require('async'),
-    routerFactory = require('../lib/routerFactory.js');
+    indexerFactory = require('../lib/indexerFactory'),
+    Router = require('../lib/router');
 
 
-var RedisRouter = require('../lib/routers/redisRouter'),
-    router = null,
+var RedisIndexer = require('../lib/indexers/redisIndexer'),
     ip = '127.0.0.1', 
     port = 6379,
     uuid1 = uuid.v1();
+
+var router = new Router();
 
 describe('setup a redis router', function() {
   it('register a redis router', function() {
     assert.doesNotThrow(
       function() {
-        routerFactory.register('redis', RedisRouter);
-      }
-    );
-  });
-
-  it('create a redis router', function() {
-    assert.doesNotThrow(
-      function() {
-        router = routerFactory.create('redis'); 
+        indexerFactory.register('redis', RedisIndexer);
       }
     );
   });
 
   it('connect to a redis router', function(done) {
-    router.connect(ip, port, function(err) {
+    router.connectToIndexer(ip, port, 'redis', function(err) {
       assertNotErr(err);
       done();
     });
